@@ -1,0 +1,65 @@
+{
+  "entities": {
+    "VaultRecord": {
+      "title": "VaultRecord",
+      "description": "Client-encrypted user protected item, credential, key or confidential note.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "UID of the owner in Firebase Auth"
+        },
+        "title": {
+          "type": "string",
+          "description": "User title of the protected item",
+          "maxLength": 100
+        },
+        "category": {
+          "type": "string",
+          "description": "Category classification",
+          "enum": [
+            "login_credential",
+            "secret_note",
+            "api_key",
+            "identity_doc",
+            "financial",
+            "recovery_phrase"
+          ]
+        },
+        "encryptedData": {
+          "type": "object",
+          "description": "AES-256-GCM encrypted ciphertext, initialization vector, and cryptographic salt"
+        },
+        "notes": {
+          "type": "string",
+          "description": "Non-sensitive contextual note",
+          "maxLength": 500
+        },
+        "tags": {
+          "type": "array",
+          "description": "Searchable tags"
+        },
+        "securityLevel": {
+          "type": "string",
+          "description": "Protection tier",
+          "enum": ["standard", "high_security"]
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Creation timestamp in ISO format"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Last modified timestamp in ISO format"
+        }
+      },
+      "required": ["userId", "title", "category", "encryptedData", "createdAt", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}/vault/{recordId}": {
+      "schema": "VaultRecord",
+      "description": "Private encrypted vault items isolated strictly to the authenticated user."
+    }
+  }
+}
